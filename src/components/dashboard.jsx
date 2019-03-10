@@ -2,11 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardAction from '../actions/dashboardActions';
+import DevicesList from './devicesList.jsx';
+import DeviceInfo from './deviceInfo.jsx';
 
 
 function mapStateToProps(state) {
 	return {
-		dashboard: state.dashboardReducer
+		dashboard: state.dashboardReducer.list,
+		currentDevice: state.dashboardReducer.currentDevice,
 	};
 }
 
@@ -19,29 +22,17 @@ function mapDispatchToProps(dispatch) {
 
 export class Dashboard extends React.Component {
 
-	componentDidMount() {
-        this.props.dashboardActions.getDevicesList();
-    }
-
 	render() {
-		const { devices, pending, error } = this.props.dashboard;
-		let camerasList = devices.map(camera => (
-			<li key={camera.id}>{`${camera.ip}:${camera.port}`}</li>
-		))
-
-		if (pending || error) {
-			return (
-				<React.Fragment>
-					<h1>{`${pending ? "Pending..." : "Error!"}`}</h1>
-				</React.Fragment>
-			)	
-		}
 		return (
-			<React.Fragment>
-				<ul>
-					{camerasList}
-				</ul>
-			</React.Fragment>
+			<div className="row">
+				<div className="col-sm-12 col-md-3  mb-3">
+					<DevicesList/>
+				</div>
+				<div className="col-sm-12 col-md-9">
+					<DeviceInfo/>
+				</div>
+			</div>
+			
 		);
 	}
 }

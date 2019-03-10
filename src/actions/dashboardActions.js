@@ -7,3 +7,20 @@ export function getDevicesList() {
         },
     };
 }
+
+export function getDevice(ip, port) {
+    return {
+        type: 'GET_DEVICE',
+        api: {
+            url: '/api/device',
+            method: 'GET',
+            data : { ip, port }
+        },
+    };
+}
+
+export function showCurrentDevice() {
+	return {
+		type: 'HIDE_CURRENT_DEVICE',
+	}
+}
