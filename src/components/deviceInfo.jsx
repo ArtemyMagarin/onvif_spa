@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import * as DashboardAction from '../actions/dashboardActions';
 import '../styles/loader.css';
 
+import DeviceInfoTabContent from './deviceInfoTabContent.jsx'
+
 
 function mapStateToProps(state) {
     return {
@@ -38,19 +40,7 @@ export class DeviceInfo extends React.Component {
                       </li>
                     </ul>
                   </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Device Information</h5>
-                    <div className="card">
-                      <ul className="list-group list-group-flush">
-                        <li className="list-group-item">Address: {`${this.props.currentDeviceData['ip']}:${this.props.currentDeviceData['port']}`}</li>
-                        <li className="list-group-item">Manufacturer: {this.props.currentDeviceData['Manufacturer']}</li>
-                        <li className="list-group-item">Model: {this.props.currentDeviceData['Model']}</li>
-                        <li className="list-group-item">Firmware Version: {this.props.currentDeviceData['Firmware Version']}</li>
-                        <li className="list-group-item">Serial Number: {this.props.currentDeviceData['Serial Number']}</li>
-                        <li className="list-group-item">Hardware ID: {this.props.currentDeviceData['Hardware ID']}</li>
-                      </ul>
-                    </div>
-                  </div>
+                  <DeviceInfoTabContent currentDeviceData={this.props.currentDeviceData}/>
                 </div>
             )
         } else {
