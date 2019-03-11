@@ -6,6 +6,7 @@ import '../styles/loader.css';
 
 import DeviceInfoTabContent from './deviceInfoTabContent.jsx'
 import DeviceStreamTabContent from './deviceStreamTabContent.jsx'
+import DeviceTestTabContent from './deviceTestTabContent.jsx'
 
 
 function mapStateToProps(state) {
@@ -38,6 +39,9 @@ export class DeviceInfo extends React.Component {
         }
         if (this.state.currentTab === 'stream') {
             currentTabContent = (<DeviceStreamTabContent snapshot_url={this.props.currentDeviceData['snapshot_url']} stream_url={this.props.currentDeviceData['stream_url']}/>);
+        }
+        if (this.state.currentTab === 'testing') {
+            currentTabContent = (<DeviceTestTabContent currentDeviceData={this.props.currentDeviceData}/>);
         }
 
         if (this.props.currentDevice.show) {
