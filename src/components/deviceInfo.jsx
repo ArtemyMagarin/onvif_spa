@@ -5,6 +5,7 @@ import * as DashboardAction from '../actions/dashboardActions';
 import '../styles/loader.css';
 
 import DeviceInfoTabContent from './deviceInfoTabContent.jsx'
+import DeviceStreamTabContent from './deviceStreamTabContent.jsx'
 
 
 function mapStateToProps(state) {
@@ -23,24 +24,54 @@ function mapDispatchToProps(dispatch) {
 
 
 export class DeviceInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentTab: 'info'
+        }
+    }
+
     render() {
+        let currentTabContent = (null);
+        if (this.state.currentTab === 'info') {
+            currentTabContent = (<DeviceInfoTabContent currentDeviceData={this.props.currentDeviceData}/>)
+        }
+        if (this.state.currentTab === 'stream') {
+            currentTabContent = (<DeviceStreamTabContent snapshot_url={this.props.currentDeviceData['snapshot_url']} stream_url={this.props.currentDeviceData['stream_url']}/>);
+        }
+
         if (this.props.currentDevice.show) {
             return (
                 <div className="card text-left">
                   <div className="card-header">
                     <ul className="nav nav-tabs card-header-tabs">
                       <li className="nav-item">
-                        <a className="nav-link active" href="#">Information</a>
+                        <a 
+                            className={`nav-link ${this.state.currentTab === 'info'?'active':''}`} 
+                            onClick={()=>{this.setState({currentTab: 'info'})}}
+                            href="#">
+                                Information
+                        </a>
                       </li>
                       <li className="nav-item">
-                        <a className="nav-link" href="#">Stream</a>
+                        <a 
+                            className={`nav-link ${this.state.currentTab === 'stream'?'active':''}`} 
+                            onClick={()=>{this.setState({currentTab: 'stream'})}}
+                            href="#">
+                                Stream
+                        </a>
                       </li>
                       <li className="nav-item">
-                        <a className="nav-link" href="#">Testing</a>
+                        <a 
+                            className={`nav-link ${this.state.currentTab === 'testing'?'active':''}`} 
+                            onClick={()=>{this.setState({currentTab: 'testing'})}}
+                            href="#">
+                                Testing
+                        </a>
                       </li>
                     </ul>
                   </div>
-                  <DeviceInfoTabContent currentDeviceData={this.props.currentDeviceData}/>
+                  {currentTabContent}
                 </div>
             )
         } else {
