@@ -1,49 +1,54 @@
 import React, { Component } from 'react';
 
 export default class Table extends Component {
+    constructor(props) {
+      super(props)
+    }
+
+    static getDerivedStateFromProps(props, state) {
+      return {
+        currentDeviceData: props.currentDeviceData,
+        selected_test: props.selected_test
+      }
+    }
+
     render() {
-    //     const { currentDeviceData } = this.props;
-    //     const rowItem = currentDeviceData['Supported Services'].map((device, id) =>                 
-    //     <tr key = { id }>
-    //       <th scope="row"></th>
-    //       <td></td>
-    //       <td></td>
-    //       <td></td>
-    //     </tr>
-    //   )      
+
+      const row_data = this.props.currentDeviceData['avaliable_tests'].filter(test => (
+        test.service === this.props.selected_test
+      ))
+
+      const rows = row_data.length ? (row_data[0].available_tests.map((name, id) => (
+        <React.Fragment>
+          <tr>
+             <td>
+               {`${id+1}`}  
+             </td>  
+             <td>
+               <input type="checkbox"/>  
+             </td>  
+             <td>
+               {`${name}`}  
+             </td>  
+          </tr>
+        </React.Fragment>
+      ))) : (null)
+
        
-	return (
-		<table className="table">
-          <thead className="thead-dark">
-            <tr>
-              <th scope="col">Select</th>
-              <th scope="col">#</th>
-              <th scope="col">Test</th>
-              <th scope="col">Service</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
-        </table>
+  	return (
+  		<table className="table">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Select</th>
+            <th scope="col">Test</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
     )
-}
+  }
 }
 

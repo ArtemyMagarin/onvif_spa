@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import bootstrap from 'bootstrap';
 
+import './styles/common.css';
+
 import Dashboard from './components/dashboard.jsx'
 import Navbar from './components/navbar.jsx'
 
