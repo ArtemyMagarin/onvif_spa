@@ -28,7 +28,7 @@ export class DeviceInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentTab: 'info'
+            currentTab: 'testing'
         }
     }
 

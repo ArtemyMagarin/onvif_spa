@@ -1,17 +1,6 @@
 import React, { Component } from 'react';
 
 export default class Table extends Component {
-    constructor(props) {
-      super(props)
-    }
-
-    static getDerivedStateFromProps(props, state) {
-      return {
-        currentDeviceData: props.currentDeviceData,
-        selected_test: props.selected_test
-      }
-    }
-
     render() {
 
       const row_data = this.props.currentDeviceData['avaliable_tests'].filter(test => (
@@ -19,8 +8,7 @@ export default class Table extends Component {
       ))
 
       const rows = row_data.length ? (row_data[0].available_tests.map((name, id) => (
-        <React.Fragment>
-          <tr>
+          <tr key={id}>
              <td>
                {`${id+1}`}  
              </td>  
@@ -31,7 +19,6 @@ export default class Table extends Component {
                {`${name}`}  
              </td>  
           </tr>
-        </React.Fragment>
       ))) : (null)
 
        
