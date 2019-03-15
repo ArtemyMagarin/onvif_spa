@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as DashboardAction from '../actions/dashboardActions';
 import '../styles/horizontal-loader.css';
 
+
 function mapStateToProps(state) {
     return {
         list: state.dashboardReducer.list.devices,
@@ -52,8 +53,19 @@ export class DevicesList extends React.Component {
             <React.Fragment>
                 <div className="row mb-2">
                     <div className={'col d-flex align-items-baseline justify-content-between'}>
-                        <span className="h5 m-0">Devices <a className="d-sm-inline-block d-md-none small" data-toggle="collapse" href="#collapseDevicesList" role="button" aria-expanded="false" aria-controls="collapseDevicesList">toggle</a></span>
-                        {this.props.devices.pending?(<div className="typing_loader"></div>):(<a href="#" onClick={() => {this.props.dashboardActions.getDevicesList()}}>Reload</a>)}
+                        <span className="h5 m-0">
+                          Devices 
+                          <i className="d-sm-inline-block d-md-none small align-middle material-icons ml-1"
+                            data-toggle="collapse" href="#collapseDevicesList" role="button" 
+                            aria-expanded="false" aria-controls="collapseDevicesList">
+                            radio_button_checked
+                          </i>
+                        </span>
+                        {this.props.devices.pending ? (
+                        <div className="typing_loader"></div>):(
+                          <span className="m-0">
+                            <i className="align-middle material-icons" onClick={ () => {this.props.dashboardActions.getDevicesList()}}>refresh</i>
+                          </span>)}
                     </div>
                 </div>
                 <div className="collapse show" id="collapseDevicesList">

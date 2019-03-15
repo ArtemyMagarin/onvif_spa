@@ -5,7 +5,7 @@ import Table from './table.jsx'
 const ListItem = ({id, text, onClick}) => {
     return (
         <button key={id} type="button" onClick={onClick} className={`list-group-item d-flex justify-content-between list-group-item-action`}>
-            {text}
+          {text}
         </button>
     )
 }
@@ -35,6 +35,10 @@ export default class DeviceTestTabContent extends Component {
       });
     }
 
+    startTest = (listItems) => {
+      console.log(listItems);
+    }
+
     addToRightColumn = (name, service) => {
       if (this.state.right_column.filter(test => test.name === name && test.service === service).length === 0) {
         this.setState({
@@ -56,14 +60,16 @@ export default class DeviceTestTabContent extends Component {
     }
 
 
-
-
     render() {
+
+        // Collections
+
         const { currentDeviceData } = this.props;
         const dropdownItems = currentDeviceData['Supported Services'].map((device, id) =>                 
-          <option
-            key={id}>
-            {device}
+          <option 
+            key={id}
+            value={device}>
+              {device}
           </option>
         ) 
 
@@ -72,7 +78,7 @@ export default class DeviceTestTabContent extends Component {
         .map((item, id) => (
             <ListItem 
                 key={id} 
-                text={`${item.name} (${item.service})`} 
+                text={`${id}.${item.name} (${item.service})`} 
                 onClick={() => { this.addToRightColumn(item.name, item.service) }}
             />
         ))  
@@ -80,15 +86,59 @@ export default class DeviceTestTabContent extends Component {
         const rightItems = this.state.right_column.map((item, id) => (
             <ListItem 
                 key={id} 
-                text={`${item.name} (${item.service})`} 
+                text={`${id}.${item.name} (${item.service})`} 
                 onClick={() => { this.removeFromRightColumn(item.name, item.service) }}
             />
         ))  
 
-        const runBtn = (<button className="ml-3 btn btn-primary" onClick={() => {}}>{`Run ${rightItems.length} test${rightItems.length===1?'':'s'}`}</button>)     
-        const addAll = leftItems.length > 0 ? (<button className="mb-3 btn btn-success" onClick={() => { this.setState({right_column: [...this.state.left_column, ...this.state.right_column]})}}>Add all to the right</button>) : (null); 
-        const removeAll = rightItems.length > 0 ? (<button className="mb-3 btn btn-danger" onClick={() => { this.setState({right_column: []}) }}>Empty list</button>) : (null);    
+        // Buttons
+
+        const runBtn = (
+            <button className="ml-3 btn btn-primary" onClick={() => { this.startTest(rightItems)}}>
+              {`Run ${rightItems.length} test${rightItems.length===1?'':'s'}`}
+            </button>)
+
+        const aboutBtn = (
+            <button className="ml-3 btn btn-secondary" data-toggle="modal" data-target="#aboutTest">
+              About test
+            </button>)   
+
+        const addAll = leftItems.length > 0 ? (
+            <button className="mb-3 btn btn-success" 
+              onClick={() => { this.setState({right_column: [...this.state.left_column, ...this.state.right_column]})}}>
+              Add all to the right
+            </button>) : (null); 
+
+        const removeAll = rightItems.length > 0 ? (
+            <button className="mb-3 btn btn-danger" 
+              onClick={() => { this.setState({right_column: []}) }}>
+              Empty list
+            </button>) : (null);    
+        
         const addFullList = this.getAddFullListBtn();
+
+        // Modal
+
+        const aboutModal = (
+          <div className="modal fade" id="aboutTest" tabindex="-1" role="dialog" aria-labelledby="aboutTestTitle" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-scrollable" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="aboutTestTitle">Modal title</h5>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  ...
+                </div>
+                <div className="modal-footer">          
+                  <button type="button" className="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
 
         return (
           <React.Fragment>
@@ -114,6 +164,8 @@ export default class DeviceTestTabContent extends Component {
                   </select>
                 </div>
                 <div className="form-group d-flex justify-content-between">
+                  {aboutBtn}
+                  {aboutModal}
                   {addFullList}
                   {runBtn}
                 </div>

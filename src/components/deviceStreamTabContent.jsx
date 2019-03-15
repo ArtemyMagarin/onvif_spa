@@ -35,7 +35,7 @@ export default class DeviceStreamTabContent extends React.Component {
             </div>
         )
         const image = (
-            <img src={url} className="stream-image"/>
+            <img src={url} alt="snapshot" className="stream-image"/>
         )
         return (
             <div className="card-body">
