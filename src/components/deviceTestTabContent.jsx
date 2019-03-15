@@ -10,6 +10,10 @@ const ListItem = ({id, text, onClick}) => {
     )
 }
 
+const flatten = list => list.reduce(
+    (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+);
+
 
 export default class DeviceTestTabContent extends Component {
 
@@ -45,6 +49,12 @@ export default class DeviceTestTabContent extends Component {
       })
     }
 
+    getAddFullListBtn = () => {
+      let avaliable_tests = this.props.currentDeviceData.avaliable_tests;
+      let allTests = flatten(avaliable_tests.map(test_service => test_service.available_tests.map(name => ({name, service: test_service.service}))));
+      return (<button className="ml-3 btn btn-primary" onClick={() => { this.setState({right_column: [...allTests]}) }}>{`Add all ${allTests.length} tests`}</button>) 
+    }
+
 
 
 
@@ -75,10 +85,10 @@ export default class DeviceTestTabContent extends Component {
             />
         ))  
 
-        const runBtn = (<button className="ml-3 btn btn-primary" onClick={() => {}}>{`Run ${rightItems.length} test${rightItems.length==1?'':'s'}`}</button>)     
+        const runBtn = (<button className="ml-3 btn btn-primary" onClick={() => {}}>{`Run ${rightItems.length} test${rightItems.length===1?'':'s'}`}</button>)     
         const addAll = leftItems.length > 0 ? (<button className="mb-3 btn btn-success" onClick={() => { this.setState({right_column: [...this.state.left_column, ...this.state.right_column]})}}>Add all to the right</button>) : (null); 
         const removeAll = rightItems.length > 0 ? (<button className="mb-3 btn btn-danger" onClick={() => { this.setState({right_column: []}) }}>Empty list</button>) : (null);    
-
+        const addFullList = this.getAddFullListBtn();
 
         return (
           <React.Fragment>
@@ -90,7 +100,7 @@ export default class DeviceTestTabContent extends Component {
                 When Run button pressed, tests from the right column
                 will be executed. Click on the test name to add or remove from the list.
               </p>
-              <form className="form-inline">
+              <div className="form-inline">
                 <div className="form-group">
                   <label className="my-1 mr-2" htmlFor="selectTestDropdown">Test type:</label>
                   <select 
@@ -103,10 +113,11 @@ export default class DeviceTestTabContent extends Component {
                     { dropdownItems }
                   </select>
                 </div>
-                <div className="form-group">
+                <div className="form-group d-flex justify-content-between">
+                  {addFullList}
                   {runBtn}
                 </div>
-              </form>
+              </div>
             </div>
             <div className="card-body">
               <div className="row">
