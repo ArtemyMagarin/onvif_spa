@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import bootstrap from 'bootstrap';
@@ -7,6 +8,14 @@ import './styles/common.css';
 
 import Dashboard from './components/dashboard.jsx'
 import Navbar from './components/navbar.jsx'
+import Report from './components/report.jsx'
+
+function mapStateToProps(state) {
+  return {
+    testInProgress: state.testReducer.currentTest.testInProgress
+  };
+}
+
 
 class App extends Component {
   render() {
@@ -14,11 +23,11 @@ class App extends Component {
       <div className="App">
         <Navbar/>
         <div className="container">
-          <Dashboard/>
+          {this.props.testInProgress ? <Report/> : <Dashboard/>}
         </div> 
       </div>
     );
   }
 }
 
-export default App;
+export default connect(mapStateToProps, null)(App)

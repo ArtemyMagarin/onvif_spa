@@ -12,13 +12,13 @@ export function singleTestAction(test_type, test_name, ip, port) {
 export function startTestAction(listItems) {
     return {
         type: 'START_TEST',
-        data : listItems 
+        data: [...listItems] 
     };
 }
 
 export function stopTestAction() {
     return {
         type: 'STOP_TEST',
-     };
+    };
 }
 

@@ -6,11 +6,11 @@ import '../styles/horizontal-loader.css';
 
 
 function mapStateToProps(state) {
-
+	return {}
 }
 
 function mapDispatchToProps(dispatch) {
-
+	return {}
 }
 
 
@@ -25,7 +25,7 @@ export class Report extends Component {
 
         return (
             <React.Fragment>
-              
+              <p>Repot</p>
             </React.Fragment>
             
         );

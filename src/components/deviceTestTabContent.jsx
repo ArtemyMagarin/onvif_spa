@@ -47,6 +47,7 @@ class DeviceTestTabContent extends Component {
     }
 
     startTest = (listItems) => {
+      console.log(listItems)
       this.props.testActions.startTestAction(listItems);
     }
 
@@ -111,8 +112,8 @@ class DeviceTestTabContent extends Component {
         // Buttons
 
         const runBtn = (
-            <button className="ml-3 btn btn-primary" onClick={() => { this.startTest(rightItems)}}>
-              {`Run ${rightItems.length} test${rightItems.length===1?'':'s'}`}
+            <button className="ml-3 btn btn-primary" onClick={() => { this.startTest(this.state.right_column)}}>
+              {`Run ${this.state.right_column.length} test${this.state.right_column.length===1?'':'s'}`}
             </button>)
 
         const aboutBtn = (
@@ -220,4 +221,4 @@ class DeviceTestTabContent extends Component {
     }
 }
 
-export default connect(mapDispatchToProps)(DeviceTestTabContent);
+export default connect(null, mapDispatchToProps)(DeviceTestTabContent);
