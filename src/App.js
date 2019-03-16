@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import 'bootstrap/dist/css/bootstrap.css';
+import 'material-icons/iconfont/material-icons.css';
+
+import $ from 'jquery';
+import Popper from 'popper.js';
 import bootstrap from 'bootstrap';
 
 import './styles/common.css';

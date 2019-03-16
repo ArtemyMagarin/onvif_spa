@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import Table from './table.jsx'
-import $ from 'jquery';
+import * as $ from 'jquery';
 import '../styles/tooltip.css'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -138,7 +137,7 @@ class DeviceTestTabContent extends Component {
         // Modal
 
         const aboutModal = (
-          <div className="modal fade" id="aboutTest" tabindex="-1" role="dialog" aria-labelledby="aboutTestTitle" aria-hidden="true">
+          <div className="modal fade" id="aboutTest" tabIndex="-1" role="dialog" aria-labelledby="aboutTestTitle" aria-hidden="true">
             <div className="modal-dialog modal-dialog-scrollable" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -201,7 +200,7 @@ class DeviceTestTabContent extends Component {
                 <div className="col">
                     {addAll}
                     <div className={(this.state.selected_test_type && 
-                    this.state.selected_test_type != 'not selected') ? 
+                    this.state.selected_test_type !== 'not selected') ? 
                     "list-group pre-scrollable" : "list-group"}>
                       {leftItems}
                     </div>
@@ -209,7 +208,7 @@ class DeviceTestTabContent extends Component {
                 <div className="col">
                     {removeAll}
                     <div className={(this.state.selected_test_type && 
-                    this.state.selected_test_type != 'not selected') ? 
+                    this.state.selected_test_type !== 'not selected') ? 
                     "list-group pre-scrollable" : "list-group"}>
                         {rightItems}
                     </div>

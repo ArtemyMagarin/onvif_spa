@@ -16,7 +16,6 @@ const initialState = {
 export default function testReducer(state = initialState, action) {
 
     switch (action.type) {
-
       case "SINGLE_TEST": {
         if (action.data) {
           let data = action.data;
@@ -46,10 +45,10 @@ export default function testReducer(state = initialState, action) {
             } 
           }
         }
+        break;
       };
           
       case "SINGLE_TEST__PENDING": {
-
         if (action.data) {
           let data = action.data;
 
@@ -78,10 +77,10 @@ export default function testReducer(state = initialState, action) {
             } 
           }
         }
+        break
       };
 
       case "SINGLE_TEST__ERROR": {
-              
           if (action.data) {
             let data = action.data;
 
@@ -110,27 +109,28 @@ export default function testReducer(state = initialState, action) {
               } 
             }
           }
+          break;
         };
 
         case "START_TEST": {
-    
-            if (action.data) {
-                return {
-                  ...state, 
-                  currentTest: { 
-                    testInProgress: true,
-                    tests: action.data.map(item => (
-                      {
-                        name: item.name,
-                        service: item.service,
-                        pending: false,
-                        error: false,
-                        data: {}
-                      }))
-                    }
-                }
+          if (action.data) {
+              return {
+                ...state, 
+                currentTest: { 
+                  testInProgress: true,
+                  tests: action.data.map(item => (
+                    {
+                      name: item.name,
+                      service: item.service,
+                      pending: false,
+                      error: false,
+                      data: {}
+                    }))
+                  }
+              }
 
-            }
+          }
+          break;
         };
           
       default: {
