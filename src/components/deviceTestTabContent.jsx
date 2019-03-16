@@ -27,7 +27,7 @@ export default class DeviceTestTabContent extends Component {
       let current_test = this.props.currentDeviceData.avaliable_tests.filter(test_type => test_type.service === event.target.value);
       let available_tests = current_test.length > 0 ? current_test[0].available_tests : [];
       
-      this.setState({
+      this.setState({        
         selected_test_type: event.target.value,
         left_column: available_tests
           .filter(test => (this.state.right_column.filter(test => test.name === test && test.service === event.target.value).length === 0))
@@ -159,7 +159,7 @@ export default class DeviceTestTabContent extends Component {
                     className="form-control"
                     onChange={this.chooseTestType}
                   >
-                    <option value="">not selected</option>
+                    <option value="not selected">not selected</option>
                     { dropdownItems }
                   </select>
                 </div>
@@ -175,13 +175,17 @@ export default class DeviceTestTabContent extends Component {
               <div className="row">
                 <div className="col">
                     {addAll}
-                    <div className="list-group">
-                        {leftItems}
+                    <div className={(this.state.selected_test_type && 
+                    this.state.selected_test_type != 'not selected') ? 
+                    "list-group pre-scrollable" : "list-group"}>
+                      {leftItems}
                     </div>
                 </div>
                 <div className="col">
                     {removeAll}
-                    <div className="list-group">
+                    <div className={(this.state.selected_test_type && 
+                    this.state.selected_test_type != 'not selected') ? 
+                    "list-group pre-scrollable" : "list-group"}>
                         {rightItems}
                     </div>
                 </div>
