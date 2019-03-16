@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Table from './table.jsx'
+import $ from 'jquery';
+import '../styles/tooltip.css'
 
 
 const ListItem = ({id, text, onClick}) => {
@@ -59,6 +61,12 @@ export default class DeviceTestTabContent extends Component {
       return (<button className="ml-3 btn btn-primary" onClick={() => { this.setState({right_column: [...allTests]}) }}>{`Add all ${allTests.length} tests`}</button>) 
     }
 
+    componentDidMount() {
+      $('[data-toggle="tooltip"]').tooltip({
+        title: "<em>1.Select test <b><u>type</u></b>.</em> <br><em>2.Choose tests and add them into right column.<br>3.When Run button pressed, tests from the right column will be executed.<br> 4.Click on the test name to add or remove from the list.</em>",
+        placement: 'bottom'
+      });
+    }
 
     render() {
 
@@ -78,7 +86,7 @@ export default class DeviceTestTabContent extends Component {
         .map((item, id) => (
             <ListItem 
                 key={id} 
-                text={`${id}.${item.name} (${item.service})`} 
+                text={`${id + 1}.${item.name} (${item.service})`} 
                 onClick={() => { this.addToRightColumn(item.name, item.service) }}
             />
         ))  
@@ -86,7 +94,7 @@ export default class DeviceTestTabContent extends Component {
         const rightItems = this.state.right_column.map((item, id) => (
             <ListItem 
                 key={id} 
-                text={`${id}.${item.name} (${item.service})`} 
+                text={`${id + 1}.${item.name} (${item.service})`} 
                 onClick={() => { this.removeFromRightColumn(item.name, item.service) }}
             />
         ))  
@@ -143,13 +151,20 @@ export default class DeviceTestTabContent extends Component {
         return (
           <React.Fragment>
             <div className="card-body">
-              <h5 className="card-title">Device Test</h5>
-              <p className="small text-muted">
-                Select test type. 
-                Choose tests and add them into right column. 
-                When Run button pressed, tests from the right column
-                will be executed. Click on the test name to add or remove from the list.
-              </p>
+              <div className="row mb-2">
+                <div className={'col d-flex'}>                  
+                  <span className="h5 m-0">
+                    <h5 className="card-title">Device Test:</h5> 
+                  </span>
+                  <span className="ml-1">
+                    <i className="align-middle material-icons" data-toggle="tooltip" 
+                      data-placement="bottom" data-html="true" style={{'cursor': 'pointer'}}
+                      data-animation="true">
+                      info
+                    </i>
+                  </span>
+                </div>
+                </div>
               <div className="form-inline">
                 <div className="form-group">
                   <label className="my-1 mr-2" htmlFor="selectTestDropdown">Test type:</label>
@@ -195,4 +210,3 @@ export default class DeviceTestTabContent extends Component {
         )
     }
 }
-

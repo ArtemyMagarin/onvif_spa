@@ -57,14 +57,15 @@ export class DevicesList extends React.Component {
                           Devices 
                           <i className="d-sm-inline-block d-md-none small align-middle material-icons ml-1"
                             data-toggle="collapse" href="#collapseDevicesList" role="button" 
-                            aria-expanded="false" aria-controls="collapseDevicesList">
+                            aria-expanded="false" aria-controls="collapseDevicesList" style={{'cursor': 'pointer'}}>
                             radio_button_checked
                           </i>
                         </span>
                         {this.props.devices.pending ? (
                         <div className="typing_loader"></div>):(
                           <span className="m-0">
-                            <i className="align-middle material-icons" onClick={ () => {this.props.dashboardActions.getDevicesList()}}>refresh</i>
+                            <i className="align-middle material-icons" style={{'cursor': 'pointer'}}
+                            onClick={ () => {this.props.dashboardActions.getDevicesList()}}>refresh</i>
                           </span>)}
                     </div>
                 </div>

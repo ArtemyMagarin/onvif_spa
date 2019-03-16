@@ -6,8 +6,8 @@ import '../styles/loader.css';
 
 import DeviceInfoTabContent from './deviceInfoTabContent.jsx'
 import DeviceStreamTabContent from './deviceStreamTabContent.jsx'
+import DeviceFeaturesTabContent from './deviceFeaturesTabContent.jsx'
 import DeviceTestTabContent from './deviceTestTabContent.jsx'
-
 
 function mapStateToProps(state) {
     return {
@@ -34,12 +34,19 @@ export class DeviceInfo extends React.Component {
 
     render() {
         let currentTabContent = (null);
+
         if (this.state.currentTab === 'info') {
             currentTabContent = (<DeviceInfoTabContent currentDeviceData={this.props.currentDeviceData}/>)
         }
+
         if (this.state.currentTab === 'stream') {
             currentTabContent = (<DeviceStreamTabContent snapshot_url={this.props.currentDeviceData['snapshot_url']} stream_url={this.props.currentDeviceData['stream_url']}/>);
         }
+
+        if (this.state.currentTab === 'features') {
+            currentTabContent = (<DeviceFeaturesTabContent currentDeviceData={this.props.currentDeviceData}/>);
+        }
+
         if (this.state.currentTab === 'testing') {
             currentTabContent = (<DeviceTestTabContent currentDeviceData={this.props.currentDeviceData}/>);
         }
@@ -67,8 +74,16 @@ export class DeviceInfo extends React.Component {
                       </li>
                       <li className="nav-item">
                         <a 
+                            className={`nav-link ${this.state.currentTab === 'features'?'active':''}`} 
+                            onClick={()=>{this.setState({currentTab: 'features'})}}
+                            href="#">
+                                Features
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a 
                             className={`nav-link ${this.state.currentTab === 'testing'?'active':''}`} 
-                            onClick={()=>{this.setState({currentTab: 'testing'})}}
+                            onClick={()=>{this.setState({currentTab: 'testing'})}}Testing
                             href="#">
                                 Testing
                         </a>

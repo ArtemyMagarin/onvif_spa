@@ -39,7 +39,7 @@ export default class DeviceStreamTabContent extends React.Component {
         )
         return (
             <div className="card-body">
-                <h5 className="card-title">Stream from device</h5>
+                <h5 className="card-title">RTSP Stream:</h5>
                 <div className="card snapshot-card">
                     {toggler}
                     {image}
