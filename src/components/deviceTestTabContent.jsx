@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Table from './table.jsx'
 import $ from 'jquery';
 import '../styles/tooltip.css'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as TestAction from '../actions/testActions';
 
 
 const ListItem = ({id, text, onClick}) => {
@@ -16,8 +19,14 @@ const flatten = list => list.reduce(
     (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
 );
 
+function mapDispatchToProps(dispatch) {
+  return {
+      testActions: bindActionCreators(TestAction, dispatch)
+  }
+}
 
-export default class DeviceTestTabContent extends Component {
+
+class DeviceTestTabContent extends Component {
 
     state = {
       selected_test_type: null,
@@ -38,7 +47,7 @@ export default class DeviceTestTabContent extends Component {
     }
 
     startTest = (listItems) => {
-      console.log(listItems);
+      this.props.testActions.startTestAction(listItems);
     }
 
     addToRightColumn = (name, service) => {
@@ -210,3 +219,5 @@ export default class DeviceTestTabContent extends Component {
         )
     }
 }
+
+export default connect(mapDispatchToProps)(DeviceTestTabContent);

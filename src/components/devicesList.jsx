@@ -84,7 +84,4 @@ export class DevicesList extends React.Component {
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(DevicesList)
+export default connect(mapStateToProps, mapDispatchToProps)(DevicesList)
