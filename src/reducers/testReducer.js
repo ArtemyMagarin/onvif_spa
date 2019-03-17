@@ -16,6 +16,7 @@ const initialState = {
 export default function testReducer(state = initialState, action) {
 
     switch (action.type) {
+      
       case "SINGLE_TEST__PENDING": 
         if (action.api) {
             const api_name = action.api.data.test_name.toLowerCase();
@@ -145,6 +146,11 @@ export default function testReducer(state = initialState, action) {
         }
         break;
           
+
+      case "CLOSE_TEST":
+        const currentTest = { ...state.currentTest, testInProgress: false};
+        return {...state, currentTest}
+      
       default: 
         break;
     }

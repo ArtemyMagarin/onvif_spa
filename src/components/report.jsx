@@ -28,7 +28,10 @@ export class Report extends Component {
     }
 
     downloadReport = () => {}
-    returnBack = () => {}
+    
+    returnBack = () => {
+    	this.props.testActions.closeTestAction();
+    }
 
     render() {
 
@@ -43,22 +46,21 @@ export class Report extends Component {
             </button>)
 
         const listItems = this.props.testsList.map((item, index) => (
-            <div class="card">
-              <div class="card-header" id={`#heading${index}`}>
-                <h5 class="mb-0">
-                  <button class="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`#collapse${index}`}>
-        	        <p>
-                      Test: {item.name}
-                      Service: {item.service}                
-                    </p>
-                    {item.pending?(<div className="typing_loader"></div>):(null)}
-                    {item.error?'error':''}
+            <div className="card" key={index}>
+              <div className="card-header" id={`heading${index}`}>
+                <h5 className="mb-0 d-flex justify-content-between align-items-center">
+                  <button className="btn btn-link" style={{color: 'black'}} data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`#collapse${index}`}>
+                      {item.name} ({item.service})                
                   </button>
+                  <div className="d-inline-block">
+                  	{item.pending ? (<div className="typing_loader"></div>) : null }
+                  	{item.error ? 'error' : null}
+                  </div>
                 </h5>
               </div>
-              <div id={`#collapse${index}`} class="collapse show" aria-labelledby={`#heading${index}`} data-parent="#accordion">
-                <div class="card-body">
-                  {item.data.result === undefined? <p>{item.data.result.supported}</p>: (null)} 
+              <div id={`collapse${index}`} className="collapse" aria-labelledby={`#heading${index}`} data-parent="#accordion">
+                <div className="card-body">
+                  {item.data.result ? <p>{item.data.result.supported?"supported":"not supported"}</p>: (null)} 
                 </div>
               </div>
             </div>            
@@ -67,12 +69,12 @@ export class Report extends Component {
         return (
             <React.Fragment>
               <h5>Report:</h5>
-              <div class="card">
-                <div class="card-body">
+              <div className="card">
+                <div className="card-body">
                     <div id="accordion">
                       {listItems}
                     </div>
-                    <div className="form-group d-flex justify-content-between">
+                    <div className="form-group d-flex justify-content-end mt-4">
                       {downloadBtn}
                       {backBtn}
                     </div>

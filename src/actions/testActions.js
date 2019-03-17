@@ -19,9 +19,9 @@ export function startTestAction(listItems) {
     };
 }
 
-export function stopTestAction() {
+export function closeTestAction() {
     return {
-        type: 'STOP_TEST',
+        type: 'CLOSE_TEST',
     };
 }
 
