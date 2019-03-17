@@ -8,7 +8,7 @@ import '../styles/horizontal-loader.css';
 function mapStateToProps(state) {
 	return {
 		currentDevice: state.dashboardReducer.currentDevice.data,
-		testsList: state.testReducer.currentTest.tests
+        testsList: state.testReducer.currentTest.tests,
 	}
 }
 
@@ -27,21 +27,57 @@ export class Report extends Component {
     	)
     }
 
-    render() {
-        const listItems = this.props.testsList.map((item, index) => (
-        	<li key={index}>
-        		<p>{item.name}</p>
-        		<p>{item.service}</p>
-        		<p>{item.pending?'pending':''}</p>
-        		<p>{item.error?'error':''}</p>
-        	</li>
-        ));
+    downloadReport = () => {}
+    returnBack = () => {}
 
+    render() {
+
+        const downloadBtn = (
+            <button className="ml-3 btn btn-primary" onClick={() => { this.downloadReport() }}>
+              Download Report
+            </button>)
+
+        const backBtn = (
+            <button className="ml-3 btn btn-primary" onClick={() => { this.returnBack() }}>
+              Back
+            </button>)
+
+        const listItems = this.props.testsList.map((item, index) => (
+            <div class="card">
+              <div class="card-header" id={`#heading${index}`}>
+                <h5 class="mb-0">
+                  <button class="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`#collapse${index}`}>
+        	        <p>
+                      Test: {item.name}
+                      Service: {item.service}                
+                    </p>
+                    {item.pending?(<div className="typing_loader"></div>):(null)}
+                    {item.error?'error':''}
+                  </button>
+                </h5>
+              </div>
+              <div id={`#collapse${index}`} class="collapse show" aria-labelledby={`#heading${index}`} data-parent="#accordion">
+                <div class="card-body">
+                  {item.data.result === undefined? <p>{item.data.result.supported}</p>: (null)} 
+                </div>
+              </div>
+            </div>            
+        ));
+        
         return (
             <React.Fragment>
-              <ul>
-              	{listItems}
-              </ul>
+              <h5>Report:</h5>
+              <div class="card">
+                <div class="card-body">
+                    <div id="accordion">
+                      {listItems}
+                    </div>
+                    <div className="form-group d-flex justify-content-between">
+                      {downloadBtn}
+                      {backBtn}
+                    </div>
+                </div>
+              </div>
             </React.Fragment>
             
         );
