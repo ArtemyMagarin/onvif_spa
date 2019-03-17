@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as TestAction from '../actions/testActions';
 import '../styles/horizontal-loader.css';
+import { apiUrl } from '../config';
 
 
 function mapStateToProps(state) {
@@ -27,8 +28,28 @@ export class Report extends Component {
     	)
     }
 
-    downloadReport = () => {}
-    
+    downloadReport = () => {
+    	const deviceData = { ...this.props.currentDevice };
+    	const testsList = this.props.testsList
+    		.filter(item => !item.pending);
+
+    	const data = {
+    		camInfo: {...deviceData},
+    		runnedTests: [testsList]
+    	}
+
+    	fetch(`${apiUrl}/api/report`, {
+    	 	method: 'POST',
+			headers: {
+			  'Accept': 'application/json',
+			  'Content-Type': 'application/json'
+			},
+    		body: JSON.stringify(data) })
+    	.then(resp => resp.json())
+    	.then(console.log)
+    	// console.log(reportUrl)
+    }
+
     returnBack = () => {
     	this.props.testActions.closeTestAction();
     }
