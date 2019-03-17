@@ -35,7 +35,7 @@ export class Report extends Component {
 
     	const data = {
     		camInfo: {...deviceData},
-    		runnedTests: [testsList]
+    		runnedTests: [...testsList]
     	}
 
     	fetch(`${apiUrl}/api/report`, {
