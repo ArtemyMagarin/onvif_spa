@@ -46,7 +46,7 @@ class DeviceTestTabContent extends Component {
     }
 
     startTest = (listItems) => {
-      console.log(listItems)
+      // console.log(listItems)
       this.props.testActions.startTestAction(listItems);
     }
 

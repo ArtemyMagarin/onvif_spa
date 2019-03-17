@@ -1,4 +1,7 @@
-export function singleTestAction(test_type, test_name, ip, port) {
+export function runSingleTestAction({ service, name, ip, port }) {
+    let test_type = service;
+    let test_name = name;
+
     return {
         type: 'SINGLE_TEST',
         api: {

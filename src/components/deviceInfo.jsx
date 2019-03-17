@@ -83,7 +83,7 @@ export class DeviceInfo extends React.Component {
                       <li className="nav-item">
                         <a 
                             className={`nav-link ${this.state.currentTab === 'testing'?'active':''}`} 
-                            onClick={()=>{this.setState({currentTab: 'testing'})}}Testing
+                            onClick={()=>{this.setState({currentTab: 'testing'})}}
                             href="#">
                                 Testing
                         </a>

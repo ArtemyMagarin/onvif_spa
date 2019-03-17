@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 
 
 const apiMiddleware = store => next => action => {
-  var type = action.type;
+    var type = action.type;
     if (action.api) {
         _doRequest(action).done(function(data){
             action.type = type;
