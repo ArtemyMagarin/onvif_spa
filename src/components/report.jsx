@@ -31,7 +31,7 @@ export class Report extends Component {
     downloadReport = () => {
     	const deviceData = { ...this.props.currentDevice };
     	const testsList = this.props.testsList
-    		.filter(item => !item.pending);
+    		.filter(item => !item.pending && !item.error);
 
     	const data = {
     		camInfo: {...deviceData},
@@ -46,8 +46,7 @@ export class Report extends Component {
 			},
     		body: JSON.stringify(data) })
     	.then(resp => resp.json())
-    	.then(console.log)
-    	// console.log(reportUrl)
+    	.then(json => window.open(`${apiUrl}/${json.response}`, '_blank'))
     }
 
     returnBack = () => {
@@ -75,7 +74,7 @@ export class Report extends Component {
                   </button>
                   <div className="d-inline-block">
                   	{item.pending ? (<div className="typing_loader"></div>) : null }
-                  	{item.error ? 'error' : null}
+                  	{item.error ? 'failed' : null}
                   </div>
                 </h5>
               </div>
