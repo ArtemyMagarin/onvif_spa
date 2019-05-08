@@ -35,3 +35,14 @@ export function showCurrentDevice() {
 		type: 'HIDE_CURRENT_DEVICE',
 	}
 }
+
+export function refreshImage(ip, port) {
+    return {
+        type: 'REFRESH_SNAPSHOT_IMAGE',
+        api: {
+            url: '/api/current_snapshot',
+            method: 'GET',
+            data : { ip, port }
+        },
+    };
+}

@@ -9,6 +9,7 @@ import '../styles/style.css';
 
 function mapStateToProps(state) {
     return {
+        currentSnapshot: state.dashboardReducer.currentDevice.currentSnapshot,
         snapshotsList: state.dashboardReducer.snapshotsList.snapshots
     };
 }
@@ -23,7 +24,8 @@ class DeviceStreamTabContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tab: 'snapshot'
+            tab: 'snapshot',
+            prevSnapshot: props.snapshot_url
         }
     }
 
@@ -31,6 +33,7 @@ class DeviceStreamTabContent extends React.Component {
         console.log(this.props.currentDeviceData.ip)
         console.log(this.props.currentDeviceData.port)
         this.props.dashboardActions.getDeviceSnapshots(this.props.currentDeviceData.ip, this.props.currentDeviceData.port);
+        this.props.dashboardActions.refreshImage(this.props.currentDeviceData.ip, this.props.currentDeviceData.port)
         console.log(this.props)
     }
 
@@ -42,23 +45,28 @@ class DeviceStreamTabContent extends React.Component {
         }
     }
 
+    refreshImage = () => {
+      this.setState({prevSnapshot: this.props.currentSnapshot ? (this.props.currentSnapshot.url || this.state.prevSnapshot) : this.state.prevSnapshot})
+      this.props.dashboardActions.refreshImage(
+        this.props.currentDeviceData.ip,
+        this.props.currentDeviceData.port)
+    }
+
     render() {
-        let url = apiUrl + (this.state.tab === 'snapshot' ? this.props.snapshot_url : this.props.stream_url);
+        let url = apiUrl + (this.state.tab === 'snapshot' ? ((this.props.currentSnapshot && this.props.currentSnapshot.url) ? this.props.currentSnapshot.url : this.state.prevSnapshot): this.props.stream_url);
         url = url + (~url.indexOf('?')?'&':'?') + `t=${Date.now()}`;
 
         const snapshot_avaliable = this.props.private_snapshot_url ? !(this.props.private_snapshot_url.includes("rtsp")) : null;
 
         const carouselItems = this.props.snapshotsList ? this.props.snapshotsList.map((item, id) => (
             <div key={id} className={`carousel-item ${id === 0 ? 'active': ''}`}>
-              <img src={`${apiUrl}/${item.url}`} className="d-block w-100" alt={`Snapshot${id}`}/>
+              <img src={`${apiUrl}${item.url}`} className="d-block w-100" alt={`Snapshot${id}`}/>
               <div className="carousel-caption">
                 <h5>{item.camera}</h5>
                 <p>{item.datetime}</p>
               </div>
             </div>
         )) : []
-
-        console.table(carouselItems)
 
         const toggler = (
             <div className="switch-wrapper">
@@ -70,9 +78,19 @@ class DeviceStreamTabContent extends React.Component {
                 Show Stream
             </div>
         )
-        const image = (
-            <img src={url} alt="snapshot" className="stream-image"/>
-        )
+        
+        const spinner = (<div style={{'top': 0, 'pointer-events': 'none'}} className="d-flex justify-content-center align-items-center w-100 h-100 position-absolute">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </div>)
+
+        const image = (<div className="position-relative">
+          {<img src={url} alt="snapshot" className="stream-image" onClick={() => {this.refreshImage()}}/>}
+          {(!this.props.currentSnapshot || this.props.currentSnapshot.pending) ? spinner : (null)}
+        </div>)
+
+
         return (
             <div className="card-body">
                 <h5 className="card-title">RTSP Stream:</h5>
