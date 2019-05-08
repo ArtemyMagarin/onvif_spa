@@ -48,21 +48,23 @@ class DeviceStreamTabContent extends React.Component {
 
         const snapshot_avaliable = this.props.private_snapshot_url ? !(this.props.private_snapshot_url.includes("rtsp")) : null;
 
-        const carouselItems = this.props.snapshotsList && this.props.snapshotsList.map((item, id) => (
-            <div key={id} className="carousel-item">
-              <img src={item.url} alt={`Snapshot$(id)`}/>
+        const carouselItems = this.props.snapshotsList ? this.props.snapshotsList.map((item, id) => (
+            <div key={id} className={`carousel-item ${id === 0 ? 'active': ''}`}>
+              <img src={`${apiUrl}/${item.url}`} className="d-block w-100" alt={`Snapshot${id}`}/>
               <div className="carousel-caption">
                 <h5>{item.camera}</h5>
                 <p>{item.datetime}</p>
               </div>
             </div>
-        ))
+        )) : []
+
+        console.table(carouselItems)
 
         const toggler = (
             <div className="switch-wrapper">
                 Show snapshot
                 <label className="switch">
-                    <input type="checkbox" checked={this.state.tab === 'stream'} onClick={this.togglePicture}/>
+                    <input type="checkbox" checked={this.state.tab === 'stream'} onChange={this.togglePicture}/>
                     <span className="slider"></span>
                 </label>
                 Show Stream
@@ -113,20 +115,20 @@ class DeviceStreamTabContent extends React.Component {
                     </a>
                   )}
                 </div>
-                <div className="modal fade bd-slideshow-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg">
+                <div className="modal fade bd-slideshow-modal-lg" tabIndex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                  <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div id="carousel-slideshow" className="carousel" data-ride="carousel">
-                            <div class="carousel-inner">
+                            <div className="carousel-inner">
                               {carouselItems}
                             </div>
-                            <a class="carousel-control-prev" href="#carousel-slideshow" role="button" data-slide="prev">
-                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                              <span class="sr-only">Previous</span>
+                            <a className="carousel-control-prev" href="#carousel-slideshow" role="button" data-slide="prev">
+                              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span className="sr-only">Previous</span>
                             </a>
-                            <a class="carousel-control-next" href="#carousel-slideshow" role="button" data-slide="next">
-                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                              <span class="sr-only">Next</span>
+                            <a className="carousel-control-next" href="#carousel-slideshow" role="button" data-slide="next">
+                              <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span className="sr-only">Next</span>
                             </a>
                       </div>
                     </div>
