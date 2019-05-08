@@ -6,9 +6,9 @@ import apiMiddleware from '../middleware/apiMiddleware'
 
 export default function configureStore(initialState = {}) {
   const store = createStore(
-  	rootReducer, 
+  	rootReducer,
   	applyMiddleware(ReduxThunk, apiMiddleware, logger),
-  	
+
   )
   return store
 }

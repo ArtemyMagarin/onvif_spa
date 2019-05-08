@@ -31,8 +31,7 @@ export class Dashboard extends React.Component {
 				<div className="col-sm-12 col-md-9">
 					<DeviceInfo/>
 				</div>
-			</div>
-			
+			</div>			
 		);
 	}
 }

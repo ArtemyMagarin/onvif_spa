@@ -4,12 +4,18 @@ const initialState = {
     pending: false,
     error: false
   },
-  
+
   currentDevice: {
     data: {},
     pending: false,
     error: false,
     show: false
+  },
+
+  snapshotsList: {
+    snapshots: [],
+    pending: false,
+    error: false
   }
 }
 
@@ -83,6 +89,33 @@ export default function dashboardReducer(state = initialState, action) {
           show: false
       }
       return { ...state, currentDevice }
+      }
+
+      case "GET_DEVICE_SNAPSHOTS": {
+          const snapshotsList = {
+            snapshots: action.data,
+            pending: false,
+            error: false,
+          }
+          return { ...state, snapshotsList }
+      }
+
+      case "GET_DEVICE_SNAPSHOTS__PENDING": {
+      const snapshotsList = {
+        data: {...action.api.data},
+          pending: true,
+          error: false,
+      }
+      return { ...state, snapshotsList }
+      }
+
+      case "GET_DEVICE_SNAPSHOTS__ERROR": {
+        const snapshotsList = {
+        data: {},
+          pending: false,
+          error: true,
+      }
+      return { ...state, snapshotsList }
       }
 
       case "HIDE_CURRENT_DEVICE": {

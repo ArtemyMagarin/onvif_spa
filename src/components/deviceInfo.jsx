@@ -6,7 +6,8 @@ import '../styles/loader.css';
 
 import DeviceInfoTabContent from './deviceInfoTabContent.jsx'
 import DeviceStreamTabContent from './deviceStreamTabContent.jsx'
-import DeviceFeaturesTabContent from './deviceFeaturesTabContent.jsx'
+import DeviceSettingsTabContent from './deviceSettingsTabContent.jsx'
+import DeviceDatabaseTabContent from './deviceDatabaseTabContent.jsx'
 import DeviceTestTabContent from './deviceTestTabContent.jsx'
 
 function mapStateToProps(state) {
@@ -40,24 +41,33 @@ export class DeviceInfo extends React.Component {
         }
 
         if (this.state.currentTab === 'stream') {
-            currentTabContent = (<DeviceStreamTabContent snapshot_url={this.props.currentDeviceData['snapshot_url']} stream_url={this.props.currentDeviceData['stream_url']}/>);
-        }
-
-        if (this.state.currentTab === 'features') {
-            currentTabContent = (<DeviceFeaturesTabContent currentDeviceData={this.props.currentDeviceData}/>);
+            currentTabContent = (<DeviceStreamTabContent
+            snapshot_url={this.props.currentDeviceData['snapshot_url']}
+            private_snapshot_url = {this.props.currentDeviceData['private_snapshot_url']}
+            stream_url={this.props.currentDeviceData['stream_url']}
+            private_stream_url = {this.props.currentDeviceData['private_stream_url']}
+            currentDeviceData = {this.props.currentDeviceData} />);
         }
 
         if (this.state.currentTab === 'testing') {
             currentTabContent = (<DeviceTestTabContent currentDeviceData={this.props.currentDeviceData}/>);
         }
 
+        if (this.state.currentTab === 'settings') {
+            currentTabContent = (<DeviceSettingsTabContent currentDeviceData={this.props.currentDeviceData}/>);
+        }
+
+        if (this.state.currentTab === 'database') {
+            currentTabContent = (<DeviceDatabaseTabContent currentDeviceData={this.props.currentDeviceData}/>);
+        }
+
         if (this.props.currentDevice.show) {
             return (
                 <div className="card text-left">
                   <div className="card-header">
-                    <ul className="nav nav-tabs card-header-tabs">
+                    <ul className="nav nav-pills card-header-tabs">
                       <li className="nav-item">
-                        <a 
+                        <a
                             className={`nav-link ${this.state.currentTab === 'info'?'active':''}`} 
                             onClick={()=>{this.setState({currentTab: 'info'})}}
                             href="#">
@@ -65,7 +75,7 @@ export class DeviceInfo extends React.Component {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <a 
+                        <a
                             className={`nav-link ${this.state.currentTab === 'stream'?'active':''}`} 
                             onClick={()=>{this.setState({currentTab: 'stream'})}}
                             href="#">
@@ -73,19 +83,27 @@ export class DeviceInfo extends React.Component {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <a 
-                            className={`nav-link ${this.state.currentTab === 'features'?'active':''}`} 
-                            onClick={()=>{this.setState({currentTab: 'features'})}}
-                            href="#">
-                                Features
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a 
+                        <a
                             className={`nav-link ${this.state.currentTab === 'testing'?'active':''}`} 
                             onClick={()=>{this.setState({currentTab: 'testing'})}}
                             href="#">
                                 Testing
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                            className={`nav-link ${this.state.currentTab === 'settings'?'active':''}`} 
+                            onClick={()=>{this.setState({currentTab: 'settings'})}}
+                            href="#">
+                                Settings
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                            className={`nav-link ${this.state.currentTab === 'database'?'active':''}`} 
+                            onClick={()=>{this.setState({currentTab: 'database'})}}
+                            href="#">
+                                Database
                         </a>
                       </li>
                     </ul>
@@ -106,7 +124,4 @@ export class DeviceInfo extends React.Component {
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(DeviceInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(DeviceInfo)

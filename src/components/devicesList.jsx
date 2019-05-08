@@ -36,13 +36,13 @@ export class DevicesList extends React.Component {
 
     render() {
         const listItems = this.props.list.map((item, id) => (
-            <ListItem 
-                key={id} 
-                text={`${item.ip}:${item.port}`} 
+            <ListItem
+                key={id}
+                text={`${item.ip}:${item.port}`}
                 onClick={() => {this.props.dashboardActions.getDevice(item.ip, item.port)}}
                 active={this.props.currentDevice.data.ip === item.ip
                         && this.props.currentDevice.data.port === item.port
-                        && this.props.currentDevice.show} 
+                        && this.props.currentDevice.show}
                 pending={this.props.currentDevice.data.ip === item.ip
                         && this.props.currentDevice.data.port === item.port
                         && this.props.currentDevice.pending}
@@ -54,7 +54,7 @@ export class DevicesList extends React.Component {
                 <div className="row mb-2">
                     <div className={'col d-flex align-items-baseline justify-content-between'}>
                         <span className="h5 m-0">
-                          Devices 
+                          Devices
                           <i className="d-sm-inline-block d-md-none small align-middle material-icons ml-1"
                             data-toggle="collapse" href="#collapseDevicesList" role="button" 
                             aria-expanded="false" aria-controls="collapseDevicesList" style={{'cursor': 'pointer'}}>

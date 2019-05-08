@@ -19,6 +19,17 @@ export function getDevice(ip, port) {
     };
 }
 
+export function getDeviceSnapshots(ip, port) {
+    return {
+        type: 'GET_DEVICE_SNAPSHOTS',
+        api: {
+            url: '/api/get_snapshots',
+            method: 'GET',
+            data : { ip, port }
+        },
+    };
+}
+
 export function showCurrentDevice() {
 	return {
 		type: 'HIDE_CURRENT_DEVICE',
