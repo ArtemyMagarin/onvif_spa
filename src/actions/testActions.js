@@ -12,10 +12,24 @@ export function runSingleTestAction({ service, name, ip, port }) {
     };
 }
 
+export function runInteractiveTestAction({ service, name, ip, port }) {
+    let test_type = service;
+    let test_name = name;
+
+    return {
+        type: 'INTERACTIVE_TEST',
+        api: {
+            url: `/api/interactive/${test_type}_test/${test_name}?ip=${ip}&port=${port}`,
+            method: 'POST',
+            data : { test_type, test_name, ip, port }
+        },
+    };
+}
+
 export function startTestAction(listItems) {
     return {
         type: 'START_TEST',
-        data: [...listItems] 
+        data: [...listItems]
     };
 }
 

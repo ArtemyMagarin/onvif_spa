@@ -3,16 +3,11 @@ import { connect } from 'react-redux';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'material-icons/iconfont/material-icons.css';
-
-import $ from 'jquery';
-import Popper from 'popper.js';
-import bootstrap from 'bootstrap';
-
 import './styles/common.css';
 
-import Dashboard from './components/dashboard.jsx'
-import Navbar from './components/navbar.jsx'
-import Report from './components/report.jsx'
+import Dashboard from './components/dahboard/dashboard.jsx'
+import Navbar from './components/navbar/navbar.jsx'
+import Report from './components/report/report.jsx'
 
 function mapStateToProps(state) {
   return {

@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import '../styles/tooltip.css'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as TestAction from '../actions/testActions';
+import * as TestAction from '../../actions/testActions';
 
 
 const ListItem = ({id, text, onClick}) => {

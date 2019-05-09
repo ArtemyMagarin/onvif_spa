@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardAction from '../actions/dashboardActions';
-import '../styles/loader.css';
+import * as DashboardAction from '../../actions/dashboardActions';
+import '../../styles/loader.css';
 
 import DeviceInfoTabContent from './deviceInfoTabContent.jsx'
 import DeviceStreamTabContent from './deviceStreamTabContent.jsx'

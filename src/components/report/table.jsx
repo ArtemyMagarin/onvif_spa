@@ -10,18 +10,17 @@ export default class Table extends Component {
       const rows = row_data.length ? (row_data[0].available_tests.map((name, id) => (
           <tr key={id}>
              <td>
-               {`${id+1}`}  
-             </td>  
+               {`${id+1}`}
+             </td>
              <td>
-               <input type="checkbox"/>  
-             </td>  
+               <input type="checkbox"/>
+             </td>
              <td>
-               {`${name}`}  
-             </td>  
+               {`${name}`}
+             </td>
           </tr>
       ))) : (null)
 
-       
   	return (
   		<table className="table">
         <thead className="thead-dark">

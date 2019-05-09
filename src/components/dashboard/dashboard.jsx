@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardAction from '../actions/dashboardActions';
+import * as DashboardAction from '../../actions/dashboardActions';
 import DevicesList from './devicesList.jsx';
 import DeviceInfo from './deviceInfo.jsx';
 

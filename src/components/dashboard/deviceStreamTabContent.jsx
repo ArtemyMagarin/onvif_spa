@@ -2,9 +2,9 @@ import React from 'react';
 import { apiUrl } from '../config';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardAction from '../actions/dashboardActions';
-import '../styles/switch.css';
-import '../styles/style.css';
+import * as DashboardAction from '../../actions/dashboardActions';
+import '../../styles/switch.css';
+import '../../styles/style.css';
 
 
 function mapStateToProps(state) {

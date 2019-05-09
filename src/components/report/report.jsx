@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Summary from './summary.jsx'
-import * as TestAction from '../actions/testActions';
-import '../styles/horizontal-loader.css';
-import { apiUrl } from '../config';
-import errorImg from '../assets/letter-x.png'
-import fetchedImg from '../assets/tick.png'
+import * as TestAction from '../../actions/testActions';
+import '../../styles/horizontal-loader.css';
+import { apiUrl } from '../../config';
+import errorImg from '../../assets/letter-x.png'
+import fetchedImg from '../../assets/tick.png'
 
 
 function mapStateToProps(state) {
@@ -35,12 +35,20 @@ export class Report extends Component {
     downloadReport = () => {
     	const deviceData = { ...this.props.currentDevice };
     	const testsList = this.props.testsList
-    		.filter(item => !item.pending && !item.error);
+        .filter(item => !item.pending && !item.error);
+
+      const result = testsList.reduce((summary, item) => {
+        summary[item.service] = summary[item.service] || [];
+        summary[item.service].push(item);
+        return summary;
+      }, {});
 
     	const data = {
     		camInfo: {...deviceData},
-    		runnedTests: [...testsList]
-    	}
+    		runnedTests: {...result}
+      }
+
+      console.log(data);
 
     	fetch(`${apiUrl}/api/report`, {
     	 	method: 'POST',

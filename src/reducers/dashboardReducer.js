@@ -24,8 +24,7 @@ const initialState = {
     error: false
   }
 
-
-}
+};
 
 export default function dashboardReducer(state = initialState, action) {
 
@@ -137,41 +136,40 @@ export default function dashboardReducer(state = initialState, action) {
           pending: false,
           error: false
         }
-        const currentDevice = { 
-          ...state.currentDevice, 
-          currentSnapshot 
+        const currentDevice = {
+          ...state.currentDevice,
+          currentSnapshot
         }
         const snapshots = [...state.snapshotsList.snapshots, {...action.data}]
         const snapshotsList = {...state.snapshotsList, snapshots}
         return { ...state,  currentDevice, snapshotsList }
-      } 
+      }
       case "REFRESH_SNAPSHOT_IMAGE__PENDING": {
        const currentSnapshot = {
           url: null,
           pending: true,
           error: false
         }
-        const currentDevice = { 
-          ...state.currentDevice, 
-          currentSnapshot 
+        const currentDevice = {
+          ...state.currentDevice,
+          currentSnapshot
         }
         return { ...state,  currentDevice }
-        
-      } 
+
+      }
       case "REFRESH_SNAPSHOT_IMAGE__ERROR": {
         const currentSnapshot = {
           url: null,
           pending: false,
           error: true
         }
-        const currentDevice = { 
-          ...state.currentDevice, 
-          currentSnapshot 
+        const currentDevice = {
+          ...state.currentDevice,
+          currentSnapshot
         }
         return { ...state,  currentDevice }
 
-      } 
-
+      }
 
       default: {
         break

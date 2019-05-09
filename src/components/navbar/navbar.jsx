@@ -1,5 +1,4 @@
 import React from 'react';
-// import brand from '../assets/logo-white-onvif.png';
 
 const Navbar = (props) => {
 	return (
