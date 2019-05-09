@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as $ from 'jquery';
-import '../styles/tooltip.css'
+import '../../styles/tooltip.css'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as TestAction from '../../actions/testActions';

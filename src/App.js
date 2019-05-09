@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'material-icons/iconfont/material-icons.css';
 import './styles/common.css';
 
-import Dashboard from './components/dahboard/dashboard.jsx'
+import Dashboard from './components/dashboard/dashboard.jsx'
 import Navbar from './components/navbar/navbar.jsx'
 import Report from './components/report/report.jsx'
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { apiUrl } from '../config';
+import { apiUrl } from '../../config';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardAction from '../../actions/dashboardActions';
