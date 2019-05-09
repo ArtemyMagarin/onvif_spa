@@ -46,3 +46,14 @@ export function refreshImage(ip, port) {
         },
     };
 }
+
+export function killStream(ip, port) {
+    return {
+        type: 'KILL_STREAM',
+        api: {
+            url: '/api/stop_stream',
+            method: 'GET',
+            data : { ip, port }
+        },
+    };
+}
