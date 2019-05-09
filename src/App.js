@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import $ from 'jquery';
+import Popper from 'popper.js';
+import bootstrap from 'bootstrap';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import 'material-icons/iconfont/material-icons.css';
 import './styles/common.css';
