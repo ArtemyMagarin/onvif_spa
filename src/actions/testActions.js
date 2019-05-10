@@ -36,4 +36,11 @@ export function closeTestAction() {
     };
 }
 
+export function resolveTestManually(resolution, index) {
+    return {
+        type: 'RESOLVE_TEST_MANUALLY',
+        data: { resolution, index }
+    }
+}
+
 

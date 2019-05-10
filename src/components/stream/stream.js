@@ -35,7 +35,7 @@ export default class StreamContainer extends React.Component {
 	}
 
 	render() {
-		const video = (<video controls="true" className="w-100" id={`${this.state.ip}${this.state.port}`} 
+		const video = (<video controls={true} className="w-100" id={`${this.state.ip}${this.state.port}`} 
 			style={{'display': (this.state.loaded ? 'block': 'none')}}/>);
 
 		const spinner = this.props.spinner;

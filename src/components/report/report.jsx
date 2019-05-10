@@ -29,21 +29,11 @@ function mapDispatchToProps(dispatch) {
 
 
 export class Report extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            showModal: false
-        }
-    }
-
     componentDidMount() {
         this.runTest()
     }
-
     componentDidUpdate() {
         this.runTest()
-        this.state.showModal && (()=>{$('#streamModal').modal('show')})()
     }
 
     runTest() {
@@ -55,11 +45,17 @@ export class Report extends Component {
             && !this.state.showModal) {
 
             if (~currTest.name.indexOf('Interactive')) {
-                this.setState({showModal: true})
+                $('#streamModal').modal('show')
             } else {
+                $('#streamModal').modal('hide')
                this.props.testActions.runTest() 
             }
         }
+    }
+
+    resolveTestManually(resolution, index) {
+        this.props.testActions.nextTest()
+        this.props.testActions.resolveTestManually(resolution, index)
     }
 
     downloadReport = () => {
@@ -100,7 +96,6 @@ export class Report extends Component {
     }
 
     render() {
-
         const downloadBtn = (
             <button className={`ml-3 btn btn-primary ${this.props.testsDone?'':'disabled'}`} onClick={() => { this.downloadReport() }}>
               Download Report
@@ -135,7 +130,11 @@ export class Report extends Component {
             </div>
         ));
 
-        const modalTitle = this.props.testsList[this.props.currTestIndex] ? this.props.testsList[this.props.currTestIndex].name : "N/A";
+        const tCurrTest = this.props.testsList[this.props.currTestIndex];
+        const currIndex = this.props.currTestIndex
+        const modalTitle = tCurrTest ? tCurrTest.name : "N/A";
+        const testInProgress = tCurrTest && tCurrTest.pending;
+        const testIsDone = tCurrTest && Object.entries(tCurrTest.data).length !== 0
 
         return (
             <React.Fragment>
@@ -155,13 +154,17 @@ export class Report extends Component {
                     </div>
                 </div>
               </div>
-              {this.state.showModal && <Modal 
+              {<Modal 
                 id={'streamModal'} 
                 title={modalTitle}
                 ip={this.props.currentDevice.ip}
                 port={this.props.currentDevice.port}
+                testInProgress={testInProgress}
+                testIsDone={testIsDone}
                 onStart={() => {this.props.testActions.runTest()}}
-                onClose={() => {this.setState({showModal: false}); this.props.testActions.nextTest()}}
+                onClose={() => {this.props.testActions.nextTest()}}
+                onTestFailed={()=>{this.resolveTestManually(false, currIndex)}}
+                onTestPassed={()=>{this.resolveTestManually(true, currIndex)}}
                 />}
             </React.Fragment>
 

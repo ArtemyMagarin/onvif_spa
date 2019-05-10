@@ -5,7 +5,7 @@ import StreamContainer from '../stream/stream'
 const Modal = (props) => {
 	return (
         <div className="modal fade" id={props.id} tabIndex="-1" role="dialog">
-        <div className="modal-dialog modal-dialog-scrollable" role="document">
+        <div className="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div className="modal-content">
             <div className="modal-header">
                 <h5 className="modal-title" onClick={()=>{props.onClose && props.onClose()}}>{`${props.title}`}</h5>
@@ -17,8 +17,13 @@ const Modal = (props) => {
                 <StreamContainer dontkill={true} ip={props.ip} port={props.port}/>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={()=>{props.onClose && props.onClose()}} data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary" onClick={()=>{props.onStart && props.onStart()}}>Start test</button>
+                {props.testIsDone && <React.Fragment>
+                    <button type="button" className="btn btn-danger" onClick={()=>{props.onTestFailed && props.onTestFailed()}}>Failed</button>
+                    <button type="button" className="btn btn-success" onClick={()=>{props.onTestPassed && props.onTestPassed()}}>Passed</button>
+                </React.Fragment>}
+                {(props.testInProgress && !props.testIsDone) ? (<span>Test in progress...</span>) : (null)}
+                {(!props.testInProgress && !props.testIsDone) ? (<button type="button" className="btn btn-primary" onClick={()=>{props.onStart && props.onStart()}}>Start the test</button>) : (null)}
+                
             </div>
             </div>
         </div>
