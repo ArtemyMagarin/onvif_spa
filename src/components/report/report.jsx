@@ -25,6 +25,21 @@ function mapDispatchToProps(dispatch) {
 
 export class Report extends Component {
 
+    constructor(props) {
+      super(props);
+      this.state = {
+        isReportReady: false
+      }
+    }
+
+    handleDownload = (value) => {
+        this.setState(
+          {
+            isReportReady: value
+          }
+        )
+    }
+
     componentDidMount() {
     	const { ip, port } = this.props.currentDevice;
     	this.props.testsList.forEach(
@@ -33,6 +48,7 @@ export class Report extends Component {
     }
 
     downloadReport = () => {
+      this.handleDownload(true);
     	const deviceData = { ...this.props.currentDevice };
     	const testsList = this.props.testsList
         .filter(item => !item.pending && !item.error);
@@ -57,8 +73,12 @@ export class Report extends Component {
 			  'Content-Type': 'application/json'
 			},
     		body: JSON.stringify(data) })
-    	.then(resp => resp.json())
-    	.then(json => window.open(`${apiUrl}/${json.response}`, '_blank'))
+      .then(resp => resp.json())
+      .then(json => {
+        window.open(`${apiUrl}/${json.response}`, '_blank');
+        this.handleDownload(false);
+        }
+      )
     }
 
     returnBack = () => {
@@ -67,10 +87,16 @@ export class Report extends Component {
 
     render() {
 
-        const downloadBtn = (
-            <button className="ml-3 btn btn-primary" onClick={() => { this.downloadReport() }}>
-              Download Report
-            </button>)
+        const downloadBtn = !this.state.isReportReady ? (
+          <button className="ml-3 btn btn-primary" onClick={() => { this.downloadReport() }}>
+            Download Report
+          </button>) : (
+          <button className="ml-3 btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+            </span>
+            {'    Loading...'}
+          </button>
+          )
 
         const backBtn = (
             <button className="ml-3 btn btn-primary" onClick={() => { this.returnBack() }}>
