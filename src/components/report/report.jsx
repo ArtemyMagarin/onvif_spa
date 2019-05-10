@@ -7,6 +7,8 @@ import '../../styles/horizontal-loader.css';
 import { apiUrl } from '../../config';
 import errorImg from '../../assets/letter-x.png'
 import fetchedImg from '../../assets/tick.png'
+import Modal from './modal.jsx'
+import $ from 'jquery';
 
 
 function mapStateToProps(state) {
@@ -28,15 +30,35 @@ function mapDispatchToProps(dispatch) {
 
 export class Report extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            showModal: false
+        }
+    }
+
     componentDidMount() {
-        this.props.testActions.runTest()
+        this.runTest()
     }
 
     componentDidUpdate() {
+        this.runTest()
+        this.state.showModal && (()=>{$('#streamModal').modal('show')})()
+    }
+
+    runTest() {
+        const currTest = this.props.testsList[this.props.currTestIndex];
         if (!this.props.testsDone 
-            && this.props.testsList[this.props.currTestIndex]
-            && !this.props.testsList[this.props.currTestIndex].pending) {
-            this.props.testActions.runTest()
+            && currTest
+            && !currTest.pending
+            && Object.entries(currTest.data).length === 0
+            && !this.state.showModal) {
+
+            if (~currTest.name.indexOf('Interactive')) {
+                this.setState({showModal: true})
+            } else {
+               this.props.testActions.runTest() 
+            }
         }
     }
 
@@ -71,6 +93,9 @@ export class Report extends Component {
     }
 
     returnBack = () => {
+        fetch(`${apiUrl}/api/stop_stream?ip=${this.props.currentDevice.ip}&port=${this.props.currentDevice.port}`)
+        .then(() =>{})
+        .catch(() =>{})
         this.props.testActions.closeTestAction();
     }
 
@@ -110,6 +135,8 @@ export class Report extends Component {
             </div>
         ));
 
+        const modalTitle = this.props.testsList[this.props.currTestIndex] ? this.props.testsList[this.props.currTestIndex].name : "N/A";
+
         return (
             <React.Fragment>
               <h5>Report:</h5>
@@ -128,6 +155,14 @@ export class Report extends Component {
                     </div>
                 </div>
               </div>
+              {this.state.showModal && <Modal 
+                id={'streamModal'} 
+                title={modalTitle}
+                ip={this.props.currentDevice.ip}
+                port={this.props.currentDevice.port}
+                onStart={() => {this.props.testActions.runTest()}}
+                onClose={() => {this.setState({showModal: false}); this.props.testActions.nextTest()}}
+                />}
             </React.Fragment>
 
         );

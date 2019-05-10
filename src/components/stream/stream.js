@@ -28,14 +28,14 @@ export default class StreamContainer extends React.Component {
 	}
 
 	componentWillUnmount() {
-		fetch(`${apiUrl}/api/stop_stream?ip=${this.state.ip}&port=${this.state.port}`)
+		!this.props.dontkill && fetch(`${apiUrl}/api/stop_stream?ip=${this.state.ip}&port=${this.state.port}`)
 		.then(() =>{})
 		.catch(() =>{})
-		this.state.hls.stopLoad()
+		!this.props.dontkill && this.state.hls.stopLoad()
 	}
 
 	render() {
-		const video = (<video className="w-100" id={`${this.state.ip}${this.state.port}`} 
+		const video = (<video controls="true" className="w-100" id={`${this.state.ip}${this.state.port}`} 
 			style={{'display': (this.state.loaded ? 'block': 'none')}}/>);
 
 		const spinner = this.props.spinner;

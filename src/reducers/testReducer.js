@@ -1,8 +1,8 @@
 const initialState = {
-    tests: [],
-    currIndex: 0,
-    done: false,
-    testInProgress: false,
+  tests: [],
+  currIndex: 0,
+  done: false,
+  testInProgress: false,
 }
 
 
@@ -23,7 +23,10 @@ export default function testReducer(state=initialState, action) {
     }
 
     case "CLOSE_TEST":
-        return {...state, currIndex: 0, testInProgress: false}
+      return {...state, currIndex: 0, testInProgress: false}
+
+    case "NEXT_TEST":
+      return {...state, currIndex: state.currIndex+1}
 
     case "RUN_TEST": {
       if (action.data) {
@@ -35,7 +38,9 @@ export default function testReducer(state=initialState, action) {
           data: {...action.data.response}
         }
         tests[state.currIndex] = updated_test
-        return {...state, tests, currIndex: state.currIndex+1, done: state.currIndex >= tests.length-1 }
+        // if interactive, go next test manually
+        const currIndex = ~updated_test.name.indexOf('Interactive') ? state.currIndex : state.currIndex+1
+        return {...state, tests, currIndex, done: state.currIndex >= tests.length-1 }
       }
       return state
     }
@@ -59,7 +64,9 @@ export default function testReducer(state=initialState, action) {
         data: {...action.data.response}
       }
       tests.splice(state.currIndex, 1, updated_test)
-      return {...state, tests, currIndex: state.currIndex+1, done: state.currIndex >= tests.length-1 }
+      // if interactive, go next test manually
+      const currIndex = ~updated_test.name.indexOf('Interactive') ? state.currIndex : state.currIndex+1
+      return {...state, tests, currIndex, done: state.currIndex >= tests.length-1 }
     }
 
     default: {

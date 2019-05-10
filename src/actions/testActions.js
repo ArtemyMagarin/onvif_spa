@@ -24,6 +24,12 @@ export function startTestAction(listItems) {
     };
 }
 
+export function nextTest() {
+    return {
+        type: 'NEXT_TEST',
+    };
+}
+
 export function closeTestAction() {
     return {
         type: 'CLOSE_TEST',
