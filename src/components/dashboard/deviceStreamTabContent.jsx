@@ -3,6 +3,7 @@ import { apiUrl } from '../../config';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardAction from '../../actions/dashboardActions';
+import StreamContainer from '../stream/stream';
 import '../../styles/switch.css';
 import '../../styles/style.css';
 
@@ -79,16 +80,16 @@ class DeviceStreamTabContent extends React.Component {
             </div>
         )
         
-        const spinner = (<div style={{'top': 0, 'pointer-events': 'none'}} className="d-flex justify-content-center align-items-center w-100 h-100 position-absolute">
+        const spinner = (<div style={{'top': 0, 'pointerEvents': 'none'}} className="d-flex justify-content-center align-items-center w-100 h-100 position-absolute">
                 <div className="spinner-border text-primary" role="status">
                   <span className="sr-only">Loading...</span>
                 </div>
               </div>)
 
-        const image = (<div className="position-relative">
+        const image = (this.state.tab === 'snapshot') ? (<div className="position-relative">
           {<img src={url} alt="snapshot" className="stream-image" onClick={() => {this.refreshImage()}}/>}
           {(!this.props.currentSnapshot || this.props.currentSnapshot.pending) ? spinner : (null)}
-        </div>)
+        </div>) : (<StreamContainer spinner={spinner} ip={this.props.currentDeviceData.ip} port={this.props.currentDeviceData.port}/>)
 
 
         return (
@@ -128,7 +129,7 @@ class DeviceStreamTabContent extends React.Component {
                   {!this.props.private_snapshot_url ? ('Device does not support Snapshot or Snapshot Url content is not valid') : (!snapshot_avaliable ? 'Device does not support Snapshot or Snapshot Url content is not valid'
                   : 'Snapshot avaliable at:')}
                   {!this.props.private_snapshot_url ? (null) : (!snapshot_avaliable ? (null) :
-                    <a href={this.props.private_snapshot_url} target="_blank">
+                    <a href={this.props.private_snapshot_url} target="_blank" rel="noopener noreferrer">
                       {' ' + this.props.private_snapshot_url}
                     </a>
                   )}

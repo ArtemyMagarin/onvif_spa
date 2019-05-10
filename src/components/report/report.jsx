@@ -7,14 +7,18 @@ import '../../styles/horizontal-loader.css';
 import { apiUrl } from '../../config';
 import errorImg from '../../assets/letter-x.png'
 import fetchedImg from '../../assets/tick.png'
+import Modal from './modal.jsx'
+import $ from 'jquery';
 
 
 function mapStateToProps(state) {
-	return {
-		currentDevice: state.dashboardReducer.currentDevice.data,
-    testsList: state.testReducer.currentTest.tests,
-    testsFetched: state.testReducer.currentTest.testInProgress
-	}
+    return {
+        currentDevice: state.dashboardReducer.currentDevice.data,
+        testsList: state.testReducer.tests,
+        testsFetched: state.testReducer.testInProgress,
+        testsDone: state.testReducer.done,
+        currTestIndex: state.testReducer.currIndex,
+    }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -23,8 +27,9 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export class Report extends Component {
 
+
+export class Report extends Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -41,10 +46,32 @@ export class Report extends Component {
     }
 
     componentDidMount() {
-    	const { ip, port } = this.props.currentDevice;
-    	this.props.testsList.forEach(
-    		item => this.props.testActions.runSingleTestAction({...item, ip, port})
-    	)
+        this.runTest()
+    }
+    componentDidUpdate() {
+        this.runTest()
+    }
+
+    runTest() {
+        const currTest = this.props.testsList[this.props.currTestIndex];
+        if (!this.props.testsDone 
+            && currTest
+            && !currTest.pending
+            && Object.entries(currTest.data).length === 0
+            && !this.state.showModal) {
+
+            if (~currTest.name.indexOf('Interactive')) {
+                $('#streamModal').modal('show')
+            } else {
+                $('#streamModal').modal('hide')
+               this.props.testActions.runTest() 
+            }
+        }
+    }
+
+    resolveTestManually(resolution, index) {
+        this.props.testActions.nextTest()
+        this.props.testActions.resolveTestManually(resolution, index)
     }
 
     downloadReport = () => {
@@ -82,11 +109,13 @@ export class Report extends Component {
     }
 
     returnBack = () => {
-    	this.props.testActions.closeTestAction();
+        fetch(`${apiUrl}/api/stop_stream?ip=${this.props.currentDevice.ip}&port=${this.props.currentDevice.port}`)
+        .then(() =>{})
+        .catch(() =>{})
+        this.props.testActions.closeTestAction();
     }
 
     render() {
-
         const downloadBtn = !this.state.isReportReady ? (
           <button className="ml-3 btn btn-primary" onClick={() => { this.downloadReport() }}>
             Download Report
@@ -127,6 +156,12 @@ export class Report extends Component {
             </div>
         ));
 
+        const tCurrTest = this.props.testsList[this.props.currTestIndex];
+        const currIndex = this.props.currTestIndex
+        const modalTitle = tCurrTest ? tCurrTest.name : "N/A";
+        const testInProgress = tCurrTest && tCurrTest.pending;
+        const testIsDone = tCurrTest && Object.entries(tCurrTest.data).length !== 0
+
         return (
             <React.Fragment>
               <h5>Report:</h5>
@@ -145,6 +180,18 @@ export class Report extends Component {
                     </div>
                 </div>
               </div>
+              {<Modal 
+                id={'streamModal'} 
+                title={modalTitle}
+                ip={this.props.currentDevice.ip}
+                port={this.props.currentDevice.port}
+                testInProgress={testInProgress}
+                testIsDone={testIsDone}
+                onStart={() => {this.props.testActions.runTest()}}
+                onClose={() => {this.props.testActions.nextTest()}}
+                onTestFailed={()=>{this.resolveTestManually(false, currIndex)}}
+                onTestPassed={()=>{this.resolveTestManually(true, currIndex)}}
+                />}
             </React.Fragment>
 
         );

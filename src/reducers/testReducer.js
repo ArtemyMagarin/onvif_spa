@@ -1,159 +1,93 @@
 const initialState = {
-    currentTest: {
-        testInProgress: false,
-        tests: [
-            // {
-            //   name: "",
-            //   service: "",
-            //   pending: false,
-            //   error: false,
-            //   data: {}
-            // }
-        ]
-    }
+  tests: [],
+  currIndex: 0,
+  done: false,
+  testInProgress: false,
 }
 
-export default function testReducer(state = initialState, action) {
 
-    switch (action.type) {
-      
-      case "SINGLE_TEST__PENDING": 
-        if (action.api) {
-            const api_name = action.api.data.test_name.toLowerCase();
-            const api_service = action.api.data.test_type.toLowerCase();
-            let delIndex;
-
-            const tests = state.currentTest.tests;
-            console.log(tests)
-
-            const prevTests = tests.filter((item, index) => {
-              const item_name = item.name.toLowerCase();
-              const item_service = item.service.toLowerCase();
-              const res = !(api_name === item_name && api_service === item_service);
-              return res;
-            })
-
-            const curr_test = tests.filter((item, index) => {
-              const item_name = item.name.toLowerCase();
-              const item_service = item.service.toLowerCase();
-              const res = (api_name === item_name && api_service === item_service);
-              return res;
-            })[0]
-
-            const updated_curr_test = {
-              ...curr_test,
-              pending: true,
-              error: false,
-              data: ({})
-            }
-
-            return { ...state, currentTest: { ...state.currentTest, 
-              tests: ([ ...prevTests, updated_curr_test ]).sort((a, b) => (a.pk < b.pk ? 1 : -1) ) }}
-        }
-        break;
-
-
-      case "SINGLE_TEST__ERROR": 
-        if (action.api) {
-            const api_name = action.api.data.test_name.toLowerCase();
-            const api_service = action.api.data.test_type.toLowerCase();
-            let delIndex;
-
-            const tests = state.currentTest.tests;
-            console.log(tests)
-
-            const prevTests = tests.filter((item, index) => {
-              const item_name = item.name.toLowerCase();
-              const item_service = item.service.toLowerCase();
-              const res = !(api_name === item_name && api_service === item_service);
-              return res;
-            })
-
-            const curr_test = tests.filter((item, index) => {
-              const item_name = item.name.toLowerCase();
-              const item_service = item.service.toLowerCase();
-              const res = (api_name === item_name && api_service === item_service);
-              return res;
-            })[0]
-
-            const updated_curr_test = {
-              ...curr_test,
-              pending: false,
-              error: true,
-              data: ({})
-            }
-
-            return { ...state, currentTest: { ...state.currentTest, 
-              tests: ([ ...prevTests, updated_curr_test ]).sort((a, b) => (a.pk < b.pk ? 1 : -1) ) }}
-        }
-        break;
-
-
-
-      case "SINGLE_TEST": 
-        if (action.data) {
-            const api_name = action.data.response.name.toLowerCase();
-            const api_service = action.data.response.service.toLowerCase();
-
-            const tests = state.currentTest.tests;
-            console.log(tests)
-
-            const prevTests = tests.filter((item, index) => {
-              const item_name = item.name.toLowerCase();
-              const item_service = item.service.toLowerCase();
-              const res = !(api_name === item_name && api_service === item_service);
-              return res;
-            })
-
-            const curr_test = tests.filter((item, index) => {
-              const item_name = item.name.toLowerCase();
-              const item_service = item.service.toLowerCase();
-              const res = (api_name === item_name && api_service === item_service);
-              return res;
-            })[0]
-
-            const updated_curr_test = {
-              ...curr_test,
-              pending: false,
-              error: false,
-              data: {...action.data.response}
-            }
-
-            return { ...state, currentTest: { ...state.currentTest, 
-              tests: ([ ...prevTests, updated_curr_test ]).sort((a, b) => (a.pk < b.pk ? 1 : -1) ) }}
-        }
-        break;
-      
-
-      case "START_TEST": 
-        if (action.data) {
-            return {
-              ...state, 
-              currentTest: { 
-                testInProgress: true,
-                tests: action.data.map((item, index) => {
-                  return {
-                    pk: index+1,
-                    name: item.name,
-                    service: item.service,
-                    pending: false,
-                    error: false,
-                    data: {}
-                  }})
-                }
-            }
-
-        }
-        break;
-          
-
-      case "CLOSE_TEST":
-        const currentTest = { ...state.currentTest, testInProgress: false};
-        return {...state, currentTest}
-      
-      default: 
-        break;
+export default function testReducer(state=initialState, action) {
+  switch (action.type) {
+    case "INIT_TESTS": {
+      if (action.data) {
+        const tests = action.data.map(item => ({
+          ...item, 
+          pending: false, 
+          error: false,
+          data: {},
+        }))
+        const currIndex = 0;
+        return { ...state, tests, currIndex, testInProgress: true }
+      }
+      return state
     }
 
-    return state;
+    case "CLOSE_TEST":
+      return {...state, currIndex: 0, testInProgress: false}
+
+    case "NEXT_TEST":
+      return {...state, currIndex: state.currIndex+1}
+
+    case "RUN_TEST": {
+      if (action.data) {
+        let tests = [...state.tests]
+        const updated_test = {
+          ...tests[state.currIndex],
+          pending: false,
+          error: false,
+          data: {...action.data.response}
+        }
+        tests[state.currIndex] = updated_test
+        // if interactive, go next test manually
+        const currIndex = ~updated_test.name.indexOf('Interactive') ? state.currIndex : state.currIndex+1
+        return {...state, tests, currIndex, done: state.currIndex >= tests.length-1 }
+      }
+      return state
+    }
+
+    case "RUN_TEST__PENDING": {
+      let tests = [...state.tests]
+      const updated_test = {
+        ...state.tests[state.currIndex],
+        pending: true,
+      }
+      tests.splice(state.currIndex, 1, updated_test)
+      return {...state, tests }
+    }
+
+    case "RUN_TEST__ERROR": {
+      let tests = [...state.tests]
+      const updated_test = {
+        ...state.tests[state.currIndex],
+        pending: false,
+        error: true,
+        data: {...action.data.response}
+      }
+      tests.splice(state.currIndex, 1, updated_test)
+      // if interactive, go next test manually
+      const currIndex = ~updated_test.name.indexOf('Interactive') ? state.currIndex : state.currIndex+1
+      return {...state, tests, currIndex, done: state.currIndex >= tests.length-1 }
+    }
+
+    case 'RESOLVE_TEST_MANUALLY': {
+      if (!state.tests[action.data.index].pending) {
+        let tests = [...state.tests]
+        const result = {...state.tests[action.data.index].data.result, supported: action.data.resolution}
+        
+        const updated_test = {
+          ...state.tests[action.data.index],
+          pending: false,
+          error: false,
+          data: {...state.tests[action.data.index].data, result}
+        }
+        tests.splice(action.data.index, 1, updated_test)
+        return {...state, tests }
+      }
+      return state
+    }
+
+    default: {
+      return state
+    }
+  }
 }
