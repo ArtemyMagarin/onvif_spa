@@ -129,7 +129,7 @@ class DeviceStreamTabContent extends React.Component {
                   {!this.props.private_snapshot_url ? ('Device does not support Snapshot or Snapshot Url content is not valid') : (!snapshot_avaliable ? 'Device does not support Snapshot or Snapshot Url content is not valid'
                   : 'Snapshot avaliable at:')}
                   {!this.props.private_snapshot_url ? (null) : (!snapshot_avaliable ? (null) :
-                    <a href={this.props.private_snapshot_url} target="_blank">
+                    <a href={this.props.private_snapshot_url} target="_blank" rel="noopener noreferrer">
                       {' ' + this.props.private_snapshot_url}
                     </a>
                   )}

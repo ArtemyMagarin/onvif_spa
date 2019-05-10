@@ -10,11 +10,13 @@ import fetchedImg from '../../assets/tick.png'
 
 
 function mapStateToProps(state) {
-	return {
-		currentDevice: state.dashboardReducer.currentDevice.data,
-    testsList: state.testReducer.currentTest.tests,
-    testsFetched: state.testReducer.currentTest.testInProgress
-	}
+    return {
+        currentDevice: state.dashboardReducer.currentDevice.data,
+        testsList: state.testReducer.tests,
+        testsFetched: state.testReducer.testInProgress,
+        testsDone: state.testReducer.done,
+        currTestIndex: state.testReducer.currIndex,
+    }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -23,52 +25,59 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
+
 export class Report extends Component {
 
     componentDidMount() {
-    	const { ip, port } = this.props.currentDevice;
-    	this.props.testsList.forEach(
-    		item => this.props.testActions.runSingleTestAction({...item, ip, port})
-    	)
+        this.props.testActions.runTest()
+    }
+
+    componentDidUpdate() {
+        if (!this.props.testsDone 
+            && this.props.testsList[this.props.currTestIndex]
+            && !this.props.testsList[this.props.currTestIndex].pending) {
+            this.props.testActions.runTest()
+        }
     }
 
     downloadReport = () => {
-    	const deviceData = { ...this.props.currentDevice };
-    	const testsList = this.props.testsList
-        .filter(item => !item.pending && !item.error);
+        const deviceData = { ...this.props.currentDevice };
+        const testsList = this.props.testsList
+            .filter(item => !item.pending && !item.error);
 
-      const result = testsList.reduce((summary, item) => {
-        summary[item.service] = summary[item.service] || [];
-        summary[item.service].push(item);
-        return summary;
-      }, {});
+        const result = testsList.reduce((summary, item) => {
+            summary[item.service] = summary[item.service] || [];
+            summary[item.service].push(item);
+            return summary;
+        }, {});
 
-    	const data = {
-    		camInfo: {...deviceData},
-    		runnedTests: {...result}
-      }
+        const data = {
+            camInfo: { ...deviceData },
+            runnedTests: { ...result }
+        }
 
-      console.log(data);
+        // console.log(data);
 
-    	fetch(`${apiUrl}/api/report`, {
-    	 	method: 'POST',
-			headers: {
-			  'Accept': 'application/json',
-			  'Content-Type': 'application/json'
-			},
-    		body: JSON.stringify(data) })
-    	.then(resp => resp.json())
-    	.then(json => window.open(`${apiUrl}/${json.response}`, '_blank'))
+        fetch(`${apiUrl}/api/report`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(resp => resp.json())
+            .then(json => window.open(`${apiUrl}/${json.response}`, '_blank'))
     }
 
     returnBack = () => {
-    	this.props.testActions.closeTestAction();
+        this.props.testActions.closeTestAction();
     }
 
     render() {
 
         const downloadBtn = (
-            <button className="ml-3 btn btn-primary" onClick={() => { this.downloadReport() }}>
+            <button className={`ml-3 btn btn-primary ${this.props.testsDone?'':'disabled'}`} onClick={() => { this.downloadReport() }}>
               Download Report
             </button>)
 

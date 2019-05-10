@@ -15,7 +15,7 @@ import Report from './components/report/report.jsx'
 
 function mapStateToProps(state) {
   return {
-    testInProgress: state.testReducer.currentTest.testInProgress
+    testInProgress: state.testReducer.testInProgress
   };
 }
 
