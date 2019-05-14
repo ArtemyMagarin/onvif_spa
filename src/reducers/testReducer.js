@@ -17,13 +17,13 @@ export default function testReducer(state=initialState, action) {
           data: {},
         }))
         const currIndex = 0;
-        return { ...state, tests, currIndex, testInProgress: true }
+        return { ...state, tests, done: false, currIndex, testInProgress: true }
       }
       return state
     }
 
     case "CLOSE_TEST":
-      return {...state, currIndex: 0, testInProgress: false}
+      return {...state, currIndex: 0, done: false, testInProgress: false}
 
     case "NEXT_TEST":
       return {...state, currIndex: state.currIndex+1}
