@@ -18,12 +18,12 @@ class DeviceDatabaseTabContent extends React.Component {
     }
 
     render() {
-        const tableItems = this.state.reports && this.state.reports.map((item, id) => (
+        const tableItems = this.state.reports && this.state.reports.filter(item => item.device).map((item, id) => (
             <tr>
-              <th className="col-1" scope="row">{id+1}</th>
-              <td className="col-4">{ item.device && item.device.ip }</td>))
-              <td className="col-4">{ item.created }</td>))
-              <td className="col-3">
+              <th scope="row">{id+1}</th>
+              <td>{ item.device && item.device.ip }</td>
+              <td>{ item.created }</td>
+              <td>
                 <a className="btn btn-primary" target={"_blank"} href={`${apiUrl}/${item.url}`}>
                   Download
                 </a>
