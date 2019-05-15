@@ -15,7 +15,8 @@ import Report from './components/report/report.jsx'
 
 function mapStateToProps(state) {
   return {
-    testInProgress: state.testReducer.testInProgress
+    testInProgress: state.testReducer.testInProgress,
+    user: state.userReducer,
   };
 }
 
@@ -24,7 +25,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar/>
+        <Navbar user={this.props.user}/>
         <div className="container">
           {this.props.testInProgress ? <Report/> : <Dashboard/>}
         </div> 
