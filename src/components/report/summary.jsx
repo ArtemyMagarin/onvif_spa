@@ -19,8 +19,8 @@ const Summary = (props) => {
                 <tbody>
                     {result[key].map((item, id) => (
                         <tr className="row m-0" key={id}>
-                          <th className="col-1"scope="row">{id+1}</th>
-                          <td className="col-5">{ item.name }</td>
+                          {item.data.result ? <th className="col-1"scope="row">{id+1}</th> : (null)}
+                          {item.data.result ? <td className="col-5">{ item.data.result.report_name }</td> : (null)}
                           {item.data.result ?
                           <td className={`col-6 ${item.data.result.supported ? "text-success":"text-danger"}`}>
                           {item.data.result.supported ? "Supported" : "Not supported"}

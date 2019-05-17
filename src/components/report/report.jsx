@@ -33,8 +33,15 @@ export class Report extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        isReportReady: false
+        isReportReady: false,
+        printResponses: false
       }
+    }
+
+    toggleChange = () => {
+      this.setState({
+        printResponses: !this.state.printResponses
+      });
     }
 
     handleDownload = (value) => {
@@ -88,7 +95,8 @@ export class Report extends Component {
 
     	const data = {
     		camInfo: {...deviceData},
-    		runnedTests: {...result}
+        runnedTests: {...result},
+        printResponses: this.state.printResponses
       }
 
       console.log(data);
@@ -175,13 +183,21 @@ export class Report extends Component {
                       {listItems}
                     </div>
                     <div className="form-group d-flex justify-content-end mt-4">
+                      <div className="form-check">
+                        <input type="checkbox" checked={this.state.printResponses}
+                        onChange={() => {this.toggleChange()}} className="form-check-input"
+                        id="exampleCheck1"/>
+                        <label className="form-check-label" for="exampleCheck1">
+                        Include responses in report
+                        </label>
+                      </div>
                       {downloadBtn}
                       {backBtn}
                     </div>
                 </div>
               </div>
-              {<Modal 
-                id={'streamModal'} 
+              {<Modal
+                id={'streamModal'}
                 title={modalTitle}
                 ip={this.props.currentDevice.ip}
                 port={this.props.currentDevice.port}
